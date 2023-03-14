@@ -9,7 +9,7 @@ import SwiftUI
 import SocketIO
 
 final class Service: ObservableObject {
-    private var manager = SocketManager(socketURL: URL(string: "ws://172.104.46.87:8080")!, config: [.log(true), .compress])
+    public var manager = SocketManager(socketURL: URL(string: "ws://172.104.46.87:8080")!, config: [.log(true), .compress])
         
     @Published var messages = [String]()
     
@@ -44,6 +44,12 @@ struct ContentView: View {
             ForEach(service.messages, id: \.self) { msg in
                 Text(msg).padding()
             }
+            
+            Button("Click me!!!") {
+                let socket = service.manager.defaultSocket
+                socket.emit("my_event", "Hi there!!!")
+            }
+            
             Spacer()
             
             Image(systemName: "globe")
