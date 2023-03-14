@@ -28,11 +28,6 @@ final class Service: ObservableObject {
                 }
             }
         }
-        
-        func sendSomething() {
-            socket.emit("my_event", "Hey this is iPhone! Nanana!")
-        }
-        
         socket.connect()
     }
 }
