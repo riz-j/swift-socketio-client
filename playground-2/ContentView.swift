@@ -8,10 +8,6 @@
 import SwiftUI
 import SocketIO
 
-struct joinRequest {
-    var room: String
-}
-
 final class Service: ObservableObject {
     public var manager = SocketManager(socketURL: URL(string: "ws://172.104.46.87:8080")!, config: [.log(true), .compress])
         
@@ -32,12 +28,7 @@ final class Service: ObservableObject {
                 }
             }
         }
-        
-        
-        
         socket.connect()
-        
-        
     }
 }
 
