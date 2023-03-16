@@ -8,6 +8,10 @@
 import SwiftUI
 import SocketIO
 
+struct joinRequest {
+    var room: String
+}
+
 final class Service: ObservableObject {
     public var manager = SocketManager(socketURL: URL(string: "ws://172.104.46.87:8080")!, config: [.log(true), .compress])
         
@@ -28,7 +32,12 @@ final class Service: ObservableObject {
                 }
             }
         }
+        
+        
+        
         socket.connect()
+        
+        
     }
 }
 
@@ -45,9 +54,9 @@ struct ContentView: View {
                 Text(msg).padding()
             }
             
-            Button("Click me!!!") {
+            Button("Join Room") {
                 let socket = service.manager.defaultSocket
-                socket.emit("my_event", "Hi there!!!")
+                socket.emit("join", ["room": "room2"])
             }
             
             Spacer()
