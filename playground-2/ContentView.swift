@@ -15,6 +15,7 @@ final class Service: ObservableObject {
     
     init() {
         let socket = manager.defaultSocket
+                
         socket.on(clientEvent: .connect) { (data, ack) in
             print("Connected!")
             socket.emit("my_event", "Hey this is iPhone! Nanana!")
@@ -35,31 +36,35 @@ final class Service: ObservableObject {
 
 struct ContentView: View {
     @ObservedObject var service = Service()
+    private var socket: SocketIOClient { return service.manager.defaultSocket }
+    private var roomName: String = "room2"
+    @State private var messageInput: String = ""
     
     var body: some View {
         VStack {
             
             Text("Received")
                 .font(.largeTitle)
-            ForEach(service.messages, id: \.self) { msg in
-                Text(msg).padding()
+            List {
+                ForEach(service.messages, id: \.self) { msg in
+                    Text(msg).padding()
+                }
             }
             
             Button("Join Room") {
-                let socket = service.manager.defaultSocket
-                socket.emit("join", ["room": "room2"])
+                socket.emit("join", ["room": roomName])
             }
             
+            HStack {
+                TextField("Send Message", text: $messageInput)
+                
+                Button("Send ") {
+                    socket.emit("room_event", ["data": messageInput, "room": roomName])
+                }
+            }
+            .padding()
             Spacer()
-            
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            
-            Text("Hello, world!")
-            
         }
-        .padding()
     }
 }
 
